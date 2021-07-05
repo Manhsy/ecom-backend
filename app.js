@@ -11,6 +11,7 @@ const errorHandler = require('./middlewares/errorhandler')
 const productRoute = require('./routes/product')
 const categoryRoute = require('./routes/category')
 const userRoute = require('./routes/user')
+const orderRoute = require('./routes/order')
 require('dotenv/config');
 
 //env variable
@@ -29,6 +30,7 @@ app.use(errorHandler);
 app.use(`${api}/products`, productRoute);
 app.use(`${api}/categories`, categoryRoute)
 app.use(`${api}/users`, userRoute);
+app.use(`${api}/orders`, orderRoute);
 
 //connect mongodb
 mongoose.connect(process.env.CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true, dbName: 'ecom'})

@@ -14,7 +14,7 @@ const orderSchema = mongoose.Schema({
     },
     shippingAddress2: {
         type: String,
-        required: true
+        default: ''
     },
     city: {
         type: String,
@@ -46,8 +46,19 @@ const orderSchema = mongoose.Schema({
         ref: 'User',
         required: true
     },
-    dataOrdered: {
+    dateOrdered: {
         type: Date,
         default: Date.now
     }
 });
+
+//transforms _Id set by mongoose to a more readable form for frontend
+orderSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+})
+//use the virtual that was set up
+orderSchema.set('toJSON', {
+    virtuals: true
+})
+
+module.exports.Order = mongoose.model('Order',orderSchema)
