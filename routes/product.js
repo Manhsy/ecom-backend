@@ -4,7 +4,7 @@ const router = express.Router();
 const {Product} = require('../models/product')
 const {Category} = require('../models/category')
 
-router.get('/', async(req, res)=>{
+router.get('/api/v1/products', async(req, res)=>{
     try{
         const products = await Product.find().select('name');
         if(!products) res.status(500).json({success: false, message: 'no product'});
