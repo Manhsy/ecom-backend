@@ -16,6 +16,27 @@ router.get('/', async(req, res)=>{
         return res.status(400).send({success: false, message: err.message});
     }
 })
+
+//get count of number of user
+router.get('/get/count', async(req, res)=>{
+    try{
+        const userCount = await User.countDocuments(count=>count)
+        return res.status(200).send({userCount:userCount })
+    }catch(err){
+        return res.status(400).send({success: false, message: err.message});
+    }
+});
+
+//delete user
+router.delete('/:id', async(req, res)=>{
+    try{
+        const user = await User.findByIdAndDelete(req.params.id);
+        if(!user) res.status(400).send({success: false, message: 'user does not exist'});
+        return res.status(200).send({success: true, message: 'user is deleted'})
+    }catch(err){
+        return res.status(400).send({success: false, message: err.message});
+    }
+});
 //get 1 user excluding password
 router.get('/:id', async(req, res)=>{
     try{
@@ -28,8 +49,7 @@ router.get('/:id', async(req, res)=>{
 })
 
 //register user 
-router.post('/', async(req, res)=>{
-    
+router.post('/register', async(req, res)=>{
     try{
         let user = new User({
             name: req.body.name,
@@ -50,10 +70,9 @@ router.post('/', async(req, res)=>{
         return res.status(400).send({success: false, message: err.message});
     }
 });
+
 //sign in, return JWT 
-
 router.post('/login', async(req, res)=>{
-
     const jwtSecret = process.env.jwtSecret;
     try{
         const user = await User.findOne({email: req.body.email});
@@ -62,7 +81,8 @@ router.post('/login', async(req, res)=>{
         if(user && await user.comparePassword(req.body.password)){
             const token = jwt.sign(
                 {
-                    userId: user.id, //payload
+                    userId: user._id,
+                    isAdmin: user.isAdmin, //user can only login if they are an admin
                 },
                 jwtSecret, 
                 {
@@ -75,7 +95,6 @@ router.post('/login', async(req, res)=>{
         }
 
     }catch(err){
-        console.log(err);
         return res.status(400).send({success: false,message: err});
     }
 });

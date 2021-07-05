@@ -5,6 +5,7 @@ const morgan = require('morgan'); //allows developer to see what requests was ma
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authJwt = require('./middlewares/authUser');
+const errorHandler = require('./middlewares/errorhandler')
 
 //import router
 const productRoute = require('./routes/product')
@@ -21,6 +22,8 @@ app.use(morgan('tiny')); //console.log the request, can be saved to a file
 app.use(cors());
 app.options('*', cors());
 app.use(authJwt());
+//executes everytime there is an error
+app.use(errorHandler);
 
 //routes
 app.use(`${api}/products`, productRoute);

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
+const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -82,5 +82,4 @@ userSchema.set('toJSON', {
     virtuals: true
 })
 
-const User = mongoose.model('User', userSchema)
-module.exports.User = User;
+module.exports.User = mongoose.model('User', userSchema);

@@ -25,11 +25,11 @@ router.get('/:id', async(req, res)=>{
 });
 
 router.post('/', async(req, res)=>{
-    //populate to get the category returned by find Id
-    const category = await Category.findById(req.body.category).populate('category');
-    if(!category) return res.status(400).send({success: false, message: 'invalid category'});
 
     try{
+        //populate to get the category returned by find Id
+        const category = await Category.findById(req.body.category).populate('category');
+        if(!category) return res.status(400).send({success: false, message: 'invalid category'});
         let product = new Product({
             name: req.body.name,
             description: req.body.description,
