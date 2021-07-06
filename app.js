@@ -23,6 +23,7 @@ app.use(morgan('tiny')); //console.log the request, can be saved to a file
 app.use(cors());
 app.options('*', cors());
 app.use(authJwt());
+app.use('/public/uploads', express.static(__dirname + '/public/uploads'))
 //executes everytime there is an error
 app.use(errorHandler);
 

@@ -9,6 +9,7 @@ function authJwt(){
     return expressJwt({
         secret, 
         algorithms: ['HS256'],
+        
         //cannot access unless user has payload of admin
         isRevoked: isRevoked
     }).unless({
@@ -16,6 +17,7 @@ function authJwt(){
             //every user can access these 2 paths
             {url: /\/api\/v1\/products(.*)/, methods: ['GET', 'OPTIONS']},
             {url: /\/api\/v1\/categories(.*)/, methods: ['GET', 'OPTIONS']},
+            {url: /\/public\/uploads(.*)/, methods: ['GET', 'OPTIONS']},
             //no need token
             `${api}/users/login`,
             `${api}/users/register`
@@ -23,7 +25,6 @@ function authJwt(){
     })
 }
 
-//done
 async function isRevoked(req, payload, done){
     if(!payload.isAdmin) return done(null, true) //if user not admin, return a reject
     return done() //else return good
